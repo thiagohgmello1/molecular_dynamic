@@ -1,8 +1,8 @@
 #include <iostream>
 #include <array>
 #include <vector>
-#include "random.h"
-#include "grain.h"
+#include "headers/random.h"
+#include "headers/grain.h"
 
 using namespace std;
 

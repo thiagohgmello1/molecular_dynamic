@@ -1,5 +1,5 @@
-#include "grain.h"
-#include "random.h"
+#include "../headers/grain.h"
+#include "../headers/random.h"
 
 
 Grain::Grain(float radius, int id)
@@ -46,19 +46,19 @@ std::vector<int> Grain::get_neighbors() const
 
 void Grain::set_s(std::array<float, 2> s)
 {
-    this->s.swap(s);
+    this->s = s;
 }
 
 
 void Grain::set_v(std::array<float, 2> v)
 {
-    this->v.swap(v);
+    this->v = v;
 }
 
 
 void Grain::set_a(std::array<float, 2> a)
 {
-    this->a.swap(a);
+    this->a = a;
 }
 
 

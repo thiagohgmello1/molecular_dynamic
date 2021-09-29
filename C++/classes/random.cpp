@@ -1,4 +1,4 @@
-#include "random.h"
+#include "../headers/random.h"
 
 #define NORMALIZE (int)1073741824
 #define A (int)883314861
