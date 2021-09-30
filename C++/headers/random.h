@@ -4,7 +4,7 @@ private:
     int seed;
 
 public:
-    Random(int s);
+    Random(int s = 123);
 
     int int_rand();
     float rand();

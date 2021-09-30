@@ -9,9 +9,9 @@ using namespace std;
 
 int main(){
     Grain g = Grain(0.001, 1);
-    array<float, 2> s = {0,1};
-    array<float, 2> v = {1,2};
-    array<float, 2> a = {2,3};
+    array<float, 3> s = {0, 1, 2};
+    array<float, 3> v = {3, 4, 5};
+    array<float, 3> a = {6, 7, 8};
     vector<int> id = {1, 2, 3};
 
     g.set_s(s);
