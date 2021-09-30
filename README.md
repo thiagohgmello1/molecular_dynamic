@@ -1,2 +1,2 @@
 # molecular_dynamic
-Project to delevop a python script to molecular dynamic.
+Project to delevop a C++ script to molecular dynamic.
