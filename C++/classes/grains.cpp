@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <vector>
 #include "../headers/grains.h"
-#include "../headers/random.h"
 
 
 using namespace std;
@@ -12,7 +11,7 @@ Grains::Grains()
 {
     this->set_grains_num();
     this->set_friction();
-    this->set_random_generator();
+    this->set_initial_grains();
     // TODO Falta adicionar algumas chamadas de métodos como cálculo do periodo, instanciar os graos
 }
 
@@ -29,6 +28,7 @@ void Grains::set_grains_num()
 
     cout << "Insert number of desired grains: ";
     cin >> grains_num;
+    cin.ignore();
     cout << endl;
 
     if(grains_num > 0)
@@ -55,9 +55,10 @@ void Grains::set_friction()
 
     cout << "Insert desired friction: ";
     cin >> friction;
+    cin.ignore();
     cout << endl;
 
-    if((friction >= 0) && (friction <= 1))
+    if(0 <= friction <= 1)
     {
         this->friction = friction;
     }
@@ -81,6 +82,7 @@ void Grains::set_min_radius()
 
     cout << "Insert minimum radius: ";
     cin >> min_radius;
+    cin.ignore();
     cout << endl;
     
     if(min_radius > 0)
@@ -107,6 +109,7 @@ void Grains::set_max_radius()
 
     cout << "Insert maximum radius: ";
     cin >> max_radius;
+    cin.ignore();
     cout << endl;
     
     if((max_radius > 0) && (max_radius > this->min_radius))
@@ -121,34 +124,73 @@ void Grains::set_max_radius()
 }
 
 
-void set_initial_grains()
+auto Grains::define_radius_dist()
 {
     int distribution;
-    int seed;
+    float (Random::*ptr_random)() = NULL;
 
     cout << "Define radius distribution:" << endl;
     cout << "0 - gaussian" << endl << "1 - uniform"<< endl;
     cout << "2 - bidisperse" << endl << "3 - monodisperse" << endl;
     cin >> distribution;
+    cin.ignore();
     cout << endl;
+
+    switch (distribution)
+    {
+        case 0:
+            ptr_random = &Random::gauss_rand;
+            break;
+        case 1:
+            ptr_random = &Random::uni_rand;
+            break;
+        case 2:
+            ptr_random = &Random::bi_rand;
+            break;
+        case 3:
+            ptr_random = &Random::mono_rand;
+            break;
+        default:
+            cout << "Invalid choice." << endl;
+            exit(1);
+    }
+    return ptr_random;
+}
+
+
+void Grains::set_initial_grains()
+{
+    int seed;
+    float r = 0;
+    float m = 0;
+    float dr = this->max_radius - this->min_radius;
+    
+    float (Random::*ptr_random)() = Grains::define_radius_dist();
 
     cout << "Insert desired seed: ";
     cin >> seed;
     cout << endl;
 
-    switch (distribution)
-    {
-    case 0:
-        Random rand_func = Random(seed).gauss_rand();
-        break;
-    
-    default:
-        break;
-    }
+    Random rand_gen = Random(seed);
 
-    
+    for(int i=1; i <= this->grains_num; i++)
+    {
+        r = this->min_radius + dr * (rand_gen.*ptr_random)();
+        m = r;
+
+        grains.push_back(Grain(i, r, m));
+    }
 }
 
 
-
+std::vector<Grain> Grains:: get_grains() const
+{
+    for(Grain i:this->grains)
+    {
+        cout << "ID: " << i.get_id() << endl;
+        cout << "Radius: " << i.get_radius() << endl;
+        cout << "-------" << endl;
+    }
+    return this->grains;
+}
 

@@ -5,7 +5,13 @@
 #define B (int)453816693
 
 
-Random::Random(int seed = 123)
+Random::Random()
+{
+    this->seed = 123;
+}
+
+
+Random::Random(int seed)
 {
     this->seed = seed;
 }
