@@ -10,6 +10,8 @@ using namespace std;
 Grains::Grains()
 {
     this->set_grains_num();
+    this->set_min_radius();
+    this->set_max_radius();
     this->set_friction();
     this->set_initial_grains();
     // TODO Falta adicionar algumas chamadas de métodos como cálculo do periodo, instanciar os graos
@@ -164,6 +166,8 @@ void Grains::set_initial_grains()
     float r = 0;
     float m = 0;
     float dr = this->max_radius - this->min_radius;
+    float min_radius = 1E10;
+    float max_radius = 0;
     
     float (Random::*ptr_random)() = Grains::define_radius_dist();
 
@@ -173,13 +177,18 @@ void Grains::set_initial_grains()
 
     Random rand_gen = Random(seed);
 
-    for(int i=1; i <= this->grains_num; i++)
+    for(int i=0; i <= (this->grains_num - 1); i++)
     {
         r = this->min_radius + dr * (rand_gen.*ptr_random)();
         m = r;
 
+        min_radius = (r < min_radius) ? r : min_radius;
+        max_radius = (r > max_radius) ? r : max_radius;
+
         grains.push_back(Grain(i, r, m));
     }
+    this->min_radius = min_radius;
+    this->max_radius = max_radius;
 }
 
 
