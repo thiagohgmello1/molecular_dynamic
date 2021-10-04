@@ -126,6 +126,19 @@ void Grains::set_max_radius()
 }
 
 
+float Grains::get_sample_time() const
+{
+    return this->sample_time;
+}
+
+
+void Grains::set_sample_time(float sample_time)
+{
+    //TODO Consider insert specific sample time or calculated sample time
+    // (based on 1/2 of critical damping or 1/10 max grains speed)
+}
+
+
 auto Grains::define_radius_dist()
 {
     int distribution;
@@ -162,6 +175,7 @@ auto Grains::define_radius_dist()
 
 void Grains::set_initial_grains()
 {
+    //TODO Create logic process to define mass m
     int seed;
     float r = 0;
     float m = 0;
@@ -189,6 +203,8 @@ void Grains::set_initial_grains()
     }
     this->min_radius = min_radius;
     this->max_radius = max_radius;
+    cout << "Minimum radius: " << this->min_radius << endl;
+    cout << "Maximum radius: " << this->max_radius << endl;
 }
 
 
@@ -201,5 +217,11 @@ std::vector<Grain> Grains:: get_grains() const
         cout << "-------" << endl;
     }
     return this->grains;
+}
+
+
+void Grains::specific_grain(float radius, std::array<float, 3> s, std::array<float, 3> v, std::array<float, 3> a)
+{
+    
 }
 
