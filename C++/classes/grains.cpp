@@ -139,7 +139,7 @@ void Grains::set_sample_time(float sample_time)
 }
 
 
-auto Grains::define_radius_dist()
+auto Grains::define_radius_distribution()
 {
     int distribution;
     float (Random::*ptr_random)() = NULL;
@@ -175,15 +175,15 @@ auto Grains::define_radius_dist()
 
 void Grains::set_initial_grains()
 {
-    //TODO Create logic process to define mass m
+    //TODO Create logic process to define mass
     int seed;
-    float r = 0;
-    float m = 0;
+    float radius = 0;
+    float mass = 0;
     float dr = this->max_radius - this->min_radius;
     float min_radius = 1E10;
     float max_radius = 0;
     
-    float (Random::*ptr_random)() = Grains::define_radius_dist();
+    float (Random::*ptr_random)() = Grains::define_radius_distribution();
 
     cout << "Insert desired seed: ";
     cin >> seed;
@@ -191,15 +191,15 @@ void Grains::set_initial_grains()
 
     Random rand_gen = Random(seed);
 
-    for(int i=0; i <= (this->grains_num - 1); i++)
+    for(int id=0; id <= (this->grains_num - 1); id++)
     {
-        r = this->min_radius + dr * (rand_gen.*ptr_random)();
-        m = r;
+        radius = this->min_radius + dr * (rand_gen.*ptr_random)();
+        mass = radius;
 
-        min_radius = (r < min_radius) ? r : min_radius;
-        max_radius = (r > max_radius) ? r : max_radius;
+        min_radius = (radius < min_radius) ? radius : min_radius;
+        max_radius = (radius > max_radius) ? radius : max_radius;
 
-        grains.push_back(Grain(i, r, m));
+        grains.push_back(Grain(id, radius, mass));
     }
     this->min_radius = min_radius;
     this->max_radius = max_radius;
@@ -210,18 +210,79 @@ void Grains::set_initial_grains()
 
 std::vector<Grain> Grains:: get_grains() const
 {
-    for(Grain i:this->grains)
+    for(Grain grain:this->grains)
     {
-        cout << "ID: " << i.get_id() << endl;
-        cout << "Radius: " << i.get_radius() << endl;
+        cout << "ID: " << grain.get_id() << endl;
+        cout << "Radius: " << grain.get_radius() << endl;
         cout << "-------" << endl;
     }
     return this->grains;
 }
 
 
-void Grains::specific_grain(float radius, std::array<float, 3> s, std::array<float, 3> v, std::array<float, 3> a)
+void Grains::add_specific_grain(float radius, std::array<float, 3> s, std::array<float, 3> v, std::array<float, 3> a)
 {
-    
+    float mass = radius;
+    int id = this->grains.size() + 1;
+
+    Grain grain = Grain(id, radius, mass);
+    grain.set_s(s);
+    grain.set_v(v);
+    grain.set_a(a);
+
+    this->grains.push_back(grain);
 }
 
+
+vector<array<float, 3>> Grains::get_positions() const
+{
+    vector<array<float, 3>> positions;
+
+    for(Grain grain:this->grains)
+    {
+        positions.push_back(grain.get_s());
+    }
+    return positions;
+}
+
+
+void Grains::set_positions()
+{
+
+}
+
+
+vector<array<float, 3>> Grains::get_speeds() const
+{
+    vector<array<float, 3>> speeds;
+
+    for(Grain grain:this->grains)
+    {
+        speeds.push_back(grain.get_v());
+    }
+    return speeds;
+}
+
+
+void Grains::set_speeds()
+{
+
+}
+
+
+vector<array<float, 3>> Grains::get_accelerations() const
+{
+    vector<array<float, 3>> accelerations;
+
+    for(Grain grain:this->grains)
+    {
+        accelerations.push_back(grain.get_a());
+    }
+    return accelerations;
+}
+
+
+void Grains::set_accelerations()
+{
+
+}
